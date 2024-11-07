@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "antfarm_cooperative_agent_project:item/example_item"
+  }
+}
