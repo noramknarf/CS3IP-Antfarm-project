@@ -5,7 +5,6 @@ import github.noramknarf.antfarm_cooperative_agent_project.AntfarmCooperativeAge
 import net.minecraft.item.Item;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
-import net.minecraft.util.Identifier;
 
 public class ItemsRegistry {
     public static final Item EXAMPLE_ITEM = register( "example_item", new Item(new Item.Settings().maxCount(3)) );
