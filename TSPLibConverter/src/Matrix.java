@@ -38,25 +38,40 @@ public class Matrix {
     }
 //words
 
-    public void matrixMultiplication(Matrix input){
+    public Matrix matrixMultiplication(Matrix input){
         BigDecimal[][] otherMatrix = input.getContents();
+
         if (no_columns == input.getNo_rows()){
             BigDecimal[][] resultMatrix = new BigDecimal[no_columns][input.getNo_rows()];
             for(int row=0; row < no_rows; row++){
                 for(int column=0; column < input.getNo_columns(); column++){
-                    resultMatrix[row][column] = dotMultiplyVectors(getRow(row), input.getColumn(column));
+                    try{
+                        resultMatrix[row][column] = dotMultiplyVectors(getRow(row), input.getColumn(column));
+                    }
+                    catch(IllegalArgumentException e){
+                        throw e;
+                    }
                 }
+                return new Matrix(resultMatrix);
                 //vectorMultiply(getColumn(i), )
             }
         }
         else{
             System.out.println("Matrices do not have the correct dimensionality for multiplication");
+
         }
+        return null;
     }
 
     public static BigDecimal dotMultiplyVectors(BigDecimal[] v1, BigDecimal[] v2){
         //todo finish this and implement it as part of the matrix multiplication.
-        //this should appear as a change from the existing version.
-        return null;
+        if(v1.length != v2.length){
+            throw new IllegalArgumentException("vectors supplied to dot multiplication are not of compatible length");
+        }
+        BigDecimal total = new BigDecimal(0);
+        for(int i=0; i<v1.length; i++){
+            total = total.add(v1[i].multiply(v2[i]));
+        }
+        return total;
     }
 }

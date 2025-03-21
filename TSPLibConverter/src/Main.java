@@ -42,6 +42,7 @@ public class Main {
             }
             Matrix dstMatrix = formDSTMatrix(dataWithDuplicates, nodes.size());
             methodTest();//comment
+            calculateM(dstMatrix.matrixMultiplication(dstMatrix));
     }
 
 
@@ -164,6 +165,12 @@ public class Main {
         }
         fileReader.close();
         return nodes;
+    }
+
+    static Matrix calculateM(Matrix inputMatrix){
+        
+
+        return null;
     }
 
 }
