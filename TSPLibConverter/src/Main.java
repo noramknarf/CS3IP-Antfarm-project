@@ -42,7 +42,7 @@ public class Main {
             }
             Matrix dstMatrix = formDSTMatrix(dataWithDuplicates, nodes.size());
             methodTest();//comment
-            calculateM(dstMatrix.matrixMultiplication(dstMatrix));
+            Matrix matrixM = calculateM(dstMatrix.matrixMultiplication(dstMatrix));
     }
 
 
@@ -168,9 +168,16 @@ public class Main {
     }
 
     static Matrix calculateM(Matrix inputMatrix){
-        
+        BigDecimal[][] Mdata = new BigDecimal[inputMatrix.getNo_rows()][inputMatrix.getNo_columns()]; //doesn't actually matter whether you use rows or columns as inputmatrix will always be a perfect
+        BigDecimal[][] Dcontents = inputMatrix.getContents();
 
-        return null;
+        for (int i = 0; i<inputMatrix.getNo_rows(); i++){
+            for(int j = 0; j<inputMatrix.getNo_columns(); j++){
+                Mdata[i][j] = (Dcontents[1][j].add(Dcontents[i][1]).subtract(Dcontents[i][j])).divide(BigDecimal.valueOf(2.0));
+            }
+
+        }
+        return new Matrix(Mdata);
     }
 
 }
