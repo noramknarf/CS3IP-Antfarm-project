@@ -3,7 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/Code (not on github).iml" filepath="$PROJECT_DIR$/.idea/Code (not on github).iml" />
-      <module fileurl="file://$USER_HOME$/OneDrive - Aston University/Documents/Code (not on github)/TSPLibConverter/TSPLibConverter.iml" filepath="$USER_HOME$/OneDrive - Aston University/Documents/Code (not on github)/TSPLibConverter/TSPLibConverter.iml" />
+      <module fileurl="file://$PROJECT_DIR$/TSPLibConverter/TSPLibConverter.iml" filepath="$PROJECT_DIR$/TSPLibConverter/TSPLibConverter.iml" />
     </modules>
   </component>
 </project>
