@@ -41,9 +41,9 @@ public class Matrix {
     public Matrix matrixMultiplication(Matrix input){
         BigDecimal[][] otherMatrix = input.getContents();
 
-        if (no_columns == input.getNo_rows()){
-            BigDecimal[][] resultMatrix = new BigDecimal[no_columns][input.getNo_rows()];
-            for(int row=0; row < no_rows; row++){
+        if (this.no_columns == input.getNo_rows()){
+            BigDecimal[][] resultMatrix = new BigDecimal[this.no_columns][input.getNo_rows()];
+            for(int row=0; row < this.getNo_rows(); row++){
                 for(int column=0; column < input.getNo_columns(); column++){
                     try{
                         resultMatrix[row][column] = dotMultiplyVectors(getRow(row), input.getColumn(column));
@@ -52,9 +52,10 @@ public class Matrix {
                         throw e;
                     }
                 }
-                return new Matrix(resultMatrix);
+
                 //vectorMultiply(getColumn(i), )
             }
+            return new Matrix(resultMatrix);
         }
         else{
             System.out.println("Matrices do not have the correct dimensionality for multiplication");
@@ -73,5 +74,18 @@ public class Matrix {
             total = total.add(v1[i].multiply(v2[i]));
         }
         return total;
+    }
+
+    public Matrix gaussian_elimination(Matrix inputMatrix){
+        BigDecimal[][] m = inputMatrix.getContents();
+
+
+        int col = 0;
+
+        for (int row = 0; row <= inputMatrix.getNo_rows(); row++){
+            System.out.println("gauss BLASTA");
+        }
+
+        return null;
     }
 }

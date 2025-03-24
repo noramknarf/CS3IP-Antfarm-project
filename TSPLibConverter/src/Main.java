@@ -43,6 +43,8 @@ public class Main {
             Matrix dstMatrix = formDSTMatrix(dataWithDuplicates, nodes.size());
             methodTest();//comment
             Matrix matrixM = calculateM(dstMatrix.matrixMultiplication(dstMatrix));
+            System.out.println("Matrix M element 2:" + matrixM.getContents()[0][1]);
+            matrixM.gaussian_elimination(matrixM);
     }
 
 
@@ -168,16 +170,17 @@ public class Main {
     }
 
     static Matrix calculateM(Matrix inputMatrix){
-        BigDecimal[][] Mdata = new BigDecimal[inputMatrix.getNo_rows()][inputMatrix.getNo_columns()]; //doesn't actually matter whether you use rows or columns as inputmatrix will always be a perfect
-        BigDecimal[][] Dcontents = inputMatrix.getContents();
+        BigDecimal[][] mData = new BigDecimal[inputMatrix.getNo_rows()][inputMatrix.getNo_columns()]; //doesn't actually matter whether you use rows or columns as inputmatrix will always be a perfect
+        BigDecimal[][] dContents = inputMatrix.getContents();
 
         for (int i = 0; i<inputMatrix.getNo_rows(); i++){
             for(int j = 0; j<inputMatrix.getNo_columns(); j++){
-                Mdata[i][j] = (Dcontents[1][j].add(Dcontents[i][1]).subtract(Dcontents[i][j])).divide(BigDecimal.valueOf(2.0));
+                System.out.println(j);
+                mData[i][j] = (dContents[1][j].add(dContents[i][1]).subtract(dContents[i][j])).divide(BigDecimal.valueOf(2.0));
             }
 
         }
-        return new Matrix(Mdata);
+        return new Matrix(mData);
     }
 
 }
