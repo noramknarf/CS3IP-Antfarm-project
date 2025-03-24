@@ -43,7 +43,7 @@ public class Main {
             Matrix dstMatrix = formDSTMatrix(dataWithDuplicates, nodes.size());
             methodTest();//comment
             Matrix matrixM = calculateM(dstMatrix.matrixMultiplication(dstMatrix));
-            System.out.println("Matrix M element 2:" + matrixM.getContents()[0][1]);
+            //System.out.println("Matrix M element 2:" + matrixM.getContents()[0][1]);
             matrixM.gaussian_elimination(matrixM);
     }
 
@@ -175,7 +175,6 @@ public class Main {
 
         for (int i = 0; i<inputMatrix.getNo_rows(); i++){
             for(int j = 0; j<inputMatrix.getNo_columns(); j++){
-                System.out.println(j);
                 mData[i][j] = (dContents[1][j].add(dContents[i][1]).subtract(dContents[i][j])).divide(BigDecimal.valueOf(2.0));
             }
 

@@ -41,6 +41,7 @@ public class Matrix {
     public Matrix matrixMultiplication(Matrix input){
         BigDecimal[][] otherMatrix = input.getContents();
 
+
         if (this.no_columns == input.getNo_rows()){
             BigDecimal[][] resultMatrix = new BigDecimal[this.no_columns][input.getNo_rows()];
             for(int row=0; row < this.getNo_rows(); row++){
@@ -76,16 +77,49 @@ public class Matrix {
         return total;
     }
 
+    public BigDecimal[] multiply_row(int rowNum, int factor){
+            BigDecimal[] row = matrix[rowNum];
+            for(int i=0; i<no_columns; i++){
+                row[i] = row[i].multiply(BigDecimal.valueOf(factor));
+            }
+            return row;
+    }
+
     public Matrix gaussian_elimination(Matrix inputMatrix){
         BigDecimal[][] m = inputMatrix.getContents();
 
 
-        int col = 0;
-
-        for (int row = 0; row <= inputMatrix.getNo_rows(); row++){
-            System.out.println("gauss BLASTA");
+        //int col = 0;
+        BigDecimal scanner = BigDecimal.ZERO;
+        Boolean notEmpty = false;
+        int colA;
+        int alpha_row = 0;
+        //step 1 find the leftmost column with a non-zero value (column A)
+        for (int column = 0; column < inputMatrix.getNo_columns(); column++){
+            for(int row = 0; row < inputMatrix.getNo_rows(); row++){
+                if (m[row][column] != BigDecimal.ZERO) {
+                    colA = column;
+                    alpha_row = row; //step 1.5 - note the row of the greatest value in the column (value a, in row alpha)
+                    notEmpty = true;
+                }
+            }
+        }
+        if(!notEmpty){
+            return null;
+        }
+        //step 2 - if it is not already, swap the top row with row alpha to make value a the topmost value in its column
+        if(alpha_row != 0){
+            m = inputMatrix.swapRow(0, alpha_row);
         }
 
         return null;
+    }
+
+    //used to swap the positions of two rows in the matrix
+    BigDecimal[][] swapRow(int row1, int row2){
+        BigDecimal[] temp = matrix[row1];
+        matrix[row1] = matrix[row2];
+        matrix[row2] = temp;
+        return matrix;
     }
 }
