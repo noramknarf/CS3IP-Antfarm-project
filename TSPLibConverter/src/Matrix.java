@@ -1,4 +1,5 @@
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 public class Matrix {
     private BigDecimal[][] matrix;
@@ -77,22 +78,22 @@ public class Matrix {
         return total;
     }
 
-    public BigDecimal[] multiply_row(int rowNum, int factor){
+    public BigDecimal[] multiplyRowByValue(int rowNum, BigDecimal factor){
             BigDecimal[] row = matrix[rowNum];
             for(int i=0; i<no_columns; i++){
-                row[i] = row[i].multiply(BigDecimal.valueOf(factor));
+                row[i] = row[i].multiply(factor);
             }
             return row;
     }
 
-    public Matrix gaussian_elimination(Matrix inputMatrix){
+    public Matrix gaussianElimination(Matrix inputMatrix){
         BigDecimal[][] m = inputMatrix.getContents();
 
 
         //int col = 0;
         BigDecimal scanner = BigDecimal.ZERO;
         Boolean notEmpty = false;
-        int colA;
+        int colA = 0;
         int alpha_row = 0;
         //step 1 find the leftmost column with a non-zero value (column A)
         for (int column = 0; column < inputMatrix.getNo_columns(); column++){
@@ -111,6 +112,9 @@ public class Matrix {
         if(alpha_row != 0){
             m = inputMatrix.swapRow(0, alpha_row);
         }
+        //step 3 - convert value a to 1 by multiplying the topmost row by its inverse
+        m[0] = multiplyRowByValue(0, BigDecimal.ONE.divide((m[0][colA]), m[0][colA].scale(), RoundingMode.HALF_UP));
+        //step
 
         return null;
     }

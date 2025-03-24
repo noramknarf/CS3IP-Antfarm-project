@@ -44,7 +44,7 @@ public class Main {
             methodTest();//comment
             Matrix matrixM = calculateM(dstMatrix.matrixMultiplication(dstMatrix));
             //System.out.println("Matrix M element 2:" + matrixM.getContents()[0][1]);
-            matrixM.gaussian_elimination(matrixM);
+            matrixM.gaussianElimination(matrixM);
     }
 
 
