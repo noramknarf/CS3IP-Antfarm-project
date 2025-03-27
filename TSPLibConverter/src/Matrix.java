@@ -50,7 +50,7 @@ public class Matrix {
             for(int row=0; row < this.getNo_rows(); row++){
                 for(int column=0; column < input.getNo_columns(); column++){
                     try{
-                        resultMatrix[row][column] = dotMultiplyVectors(getRow(row), input.getColumn(column));
+                        resultMatrix[row][column] = dotMultiplyVectors(getRow(row), input.getColumn(column)).getSumTotal();
                     }
                     catch(IllegalArgumentException e){
                         throw e;
@@ -68,16 +68,12 @@ public class Matrix {
         return null;
     }
 
-    public static BigDecimal dotMultiplyVectors(BigDecimal[] v1, BigDecimal[] v2){
-        //todo finish this and implement it as part of the matrix multiplication.
+    public static Vector dotMultiplyVectors(BigDecimal[] v1, BigDecimal[] v2){
         if(v1.length != v2.length){
             throw new IllegalArgumentException("vectors supplied to dot multiplication are not of compatible length");
         }
-        BigDecimal total = new BigDecimal(0);
-        for(int i=0; i<v1.length; i++){
-            total = total.add(v1[i].multiply(v2[i]));
-        }
-        return total;
+
+        return new Vector(v1).dotMultiplication(new Vector(v2));
     }
 
     public BigDecimal[] multiplyRowByValue(int rowNum, BigDecimal factor, int precision){
