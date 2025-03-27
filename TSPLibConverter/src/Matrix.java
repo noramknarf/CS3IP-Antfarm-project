@@ -80,6 +80,7 @@ public class Matrix {
         return total;
     }
 
+    //I may decide to change these so they return a vector instead if I have need of it later
     public BigDecimal[] multiplyRowByValue(int rowNum, BigDecimal factor, int precision){
             BigDecimal[] row = matrix[rowNum];
             MathContext context = new MathContext(precision);
@@ -87,6 +88,14 @@ public class Matrix {
                 row[i] = row[i].multiply(factor, context);
             }
             return row;
+    }
+
+    public BigDecimal[] multiplyRowByValue(BigDecimal[] row, BigDecimal factor, int precision){
+        MathContext context = new MathContext(precision);
+        for(int i=0; i<no_columns; i++){
+            row[i] = row[i].multiply(factor, context);
+        }
+        return row;
     }
 
     public Matrix gaussianElimination(Matrix inputMatrix){
@@ -143,7 +152,10 @@ public class Matrix {
             System.out.println(x);
         }*/
 
-        //step
+        //step 4 multiply each row below the first by a multiple of the first such that each value in the same column as a ends as zero.
+        for (int i = 1; i < no_rows; i++){
+           // m[i] = dotMultiplyVectors(multiplyRowByValue(m[0], m[0][0], 32), m[i]);
+        }
 
         return null;
     }
