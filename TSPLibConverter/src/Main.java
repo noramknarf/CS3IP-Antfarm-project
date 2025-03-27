@@ -37,6 +37,7 @@ public class Main {
         //-------------------------------------------------------------------------------------------------------
             collatedData.sort(null);
             dataWithDuplicates.sort(null);
+            System.out.println("Wario");
             for(Edge i: dataWithDuplicates){
                 System.out.println(i);
             }
@@ -83,9 +84,9 @@ public class Main {
         int h = 0;
         for(int j = 0; j < dstMatrix.length; j++){
             for(int i = 0; i < dstMatrix.length; i++){
-                System.out.printf("i = %d, j = %d, h = %d\n", i, j, h);
+               // System.out.printf("i = %d, j = %d, h = %d\n", i, j, h);
                 Edge tempEdgeHolder = edgeDataset.get(h);
-                System.out.println(tempEdgeHolder);
+               // System.out.println(tempEdgeHolder);
                 dstMatrix[j][i] = tempEdgeHolder.getDistance();
 
                 h++;

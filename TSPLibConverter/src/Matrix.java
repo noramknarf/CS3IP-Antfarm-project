@@ -1,7 +1,13 @@
 import java.math.BigDecimal;
+import java.math.MathContext;
 import java.math.RoundingMode;
 
 public class Matrix {
+    enum OutputMode{
+        TOTAL,
+        INDIVIDUAL
+    }
+
     private BigDecimal[][] matrix;
     private int no_rows;
     private int no_columns;
@@ -66,7 +72,7 @@ public class Matrix {
         return null;
     }
 
-    public static BigDecimal dotMultiplyVectors(BigDecimal[] v1, BigDecimal[] v2){
+    public static BigDecimal dotMultiplyVectors(BigDecimal[] v1, BigDecimal[] v2, OutputMode outputMode){
         //todo finish this and implement it as part of the matrix multiplication.
         if(v1.length != v2.length){
             throw new IllegalArgumentException("vectors supplied to dot multiplication are not of compatible length");
@@ -78,10 +84,11 @@ public class Matrix {
         return total;
     }
 
-    public BigDecimal[] multiplyRowByValue(int rowNum, BigDecimal factor){
+    public BigDecimal[] multiplyRowByValue(int rowNum, BigDecimal factor, int precision){
             BigDecimal[] row = matrix[rowNum];
+            MathContext context = new MathContext(precision);
             for(int i=0; i<no_columns; i++){
-                row[i] = row[i].multiply(factor);
+                row[i] = row[i].multiply(factor, context);
             }
             return row;
     }
@@ -92,28 +99,54 @@ public class Matrix {
 
         //int col = 0;
         BigDecimal scanner = BigDecimal.ZERO;
-        Boolean notEmpty = false;
+        Boolean empty = false;
         int colA = 0;
         int alpha_row = 0;
+        BigDecimal alpha = BigDecimal.ZERO;
         //step 1 find the leftmost column with a non-zero value (column A)
         for (int column = 0; column < inputMatrix.getNo_columns(); column++){
             for(int row = 0; row < inputMatrix.getNo_rows(); row++){
                 if (m[row][column] != BigDecimal.ZERO) {
                     colA = column;
-                    alpha_row = row; //step 1.5 - note the row of the greatest value in the column (value a, in row alpha)
-                    notEmpty = true;
+                    alpha_row = row;
+                    empty = false;
+                    alpha = m[row][column];
+                    break;
                 }
+
+            }
+            if(!empty){
+                break;
             }
         }
-        if(!notEmpty){
+        if(empty){
             return null;
+        }
+        //step 1.5 - find the row of the greatest value in the column (value a, in row alpha)
+        for(int row = 0; row < inputMatrix.getNo_rows(); row++) {
+            if (m[row][colA].compareTo(alpha) > 0) {
+                alpha_row = row;
+                alpha = m[row][colA];
+            }
         }
         //step 2 - if it is not already, swap the top row with row alpha to make value a the topmost value in its column
         if(alpha_row != 0){
             m = inputMatrix.swapRow(0, alpha_row);
+            System.out.printf("Swapped %d with 0\n", alpha_row);
         }
         //step 3 - convert value a to 1 by multiplying the topmost row by its inverse
-        m[0] = multiplyRowByValue(0, BigDecimal.ONE.divide((m[0][colA]), m[0][colA].scale(), RoundingMode.HALF_UP));
+        BigDecimal multiplicand = BigDecimal.ONE.divide(alpha, 400, RoundingMode.HALF_UP);
+        System.out.println(alpha.multiply(multiplicand, new MathContext(32))); //this should result in an output of 1. find out why it isn't doing that.
+        System.out.println("scale: " + alpha.scale());
+        m[0] = multiplyRowByValue(0,multiplicand, 32);
+        System.out.println(m[0][colA]);
+        System.out.println(colA); //TODO Ask others for their opinions on how best to handle determining the rounding. I think I will just default to 32dp
+        System.out.println("alpha: " + alpha);
+        System.out.println("result of multiplication:" + m[0][colA]);
+       /* for(BigDecimal x:m[0]){
+            System.out.println(x);
+        }*/
+
         //step
 
         return null;
@@ -127,3 +160,8 @@ public class Matrix {
         return matrix;
     }
 }
+/*idea final step is recursive, calling gaussian Elim on a new matrix (or just change param to matrix contents.
+Then, gaussian elim returns a new matrix consisting of the first row plus the results of the gaussian elim one level lower
+
+Remember you need to make a vector class to support both results of the vector multiplication.
+Just make the vector multiplication return a new vector, taking two others as params, and give vector a getTotal method*/
