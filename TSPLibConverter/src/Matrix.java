@@ -3,10 +3,6 @@ import java.math.MathContext;
 import java.math.RoundingMode;
 
 public class Matrix {
-    enum OutputMode{
-        TOTAL,
-        INDIVIDUAL
-    }
 
     private BigDecimal[][] matrix;
     private int no_rows;
@@ -72,7 +68,7 @@ public class Matrix {
         return null;
     }
 
-    public static BigDecimal dotMultiplyVectors(BigDecimal[] v1, BigDecimal[] v2, OutputMode outputMode){
+    public static BigDecimal dotMultiplyVectors(BigDecimal[] v1, BigDecimal[] v2){
         //todo finish this and implement it as part of the matrix multiplication.
         if(v1.length != v2.length){
             throw new IllegalArgumentException("vectors supplied to dot multiplication are not of compatible length");
