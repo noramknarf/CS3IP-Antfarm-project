@@ -95,10 +95,11 @@ public class Matrix {
             return row;
     }
 
-    public BigDecimal[] multiplyRowByValue(BigDecimal[] row, BigDecimal factor, int precision){
+    public BigDecimal[] multiplyRowByValue(BigDecimal[] inputRow, BigDecimal factor, int precision){
         MathContext context = new MathContext(precision);
+        BigDecimal[] row = new BigDecimal[inputRow.length];
         for(int i=0; i<no_columns; i++){
-            row[i] = row[i].multiply(factor, context);
+            row[i] = inputRow[i].multiply(factor, context);
         }
         return row;
     }
@@ -168,15 +169,17 @@ public class Matrix {
             BigDecimal inverseOfM_i = m[i][colA].negate();
             System.out.println("m[i][colA].negate =" + m[i][colA].negate() );
             System.out.println("zero, colA = " + m[0][colA]);       //Identified possible source of the issue: m[0][colA] is changing despite no operations being done on it.
-            BigDecimal[] multipleOfRowAlpha = multiplyRowByValue(m[0], inverseOfM_i, 32);
+            BigDecimal[] multipleOfRowAlpha = multiplyRowByValue(m[0], inverseOfM_i, 50);
             System.out.println("zero colA multiplied by m[i][colA].negate is:" + multipleOfRowAlpha[colA]);
             BigDecimal temp = m[i][colA];
            System.out.println(temp);
-           System.out.println("");
-            //System.out.println("Multiple of alpha = "+ multipleOfRowAlpha[colA]);
-            //System.out.println("m[i][colA] = "+ m[i][colA]);
 
-           // m[i] = addVectors(m[i],multipleOfRowAlpha).getContents();
+            //System.out.println("Multiple of alpha = "+ multipleOfRowAlpha[colA]);
+
+
+            m[i] = addVectors(m[i],multipleOfRowAlpha).getContents();
+            System.out.println("m[i][colA] = "+ m[i][colA]);
+            System.out.println("");
             //System.out.printf("result of adding %s to %s is %s\n", multipleOfRowAlpha[colA],temp, m[i][colA]);
         }
 
