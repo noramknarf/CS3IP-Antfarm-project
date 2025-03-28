@@ -50,7 +50,7 @@ public class Matrix {
             for(int row=0; row < this.getNo_rows(); row++){
                 for(int column=0; column < input.getNo_columns(); column++){
                     try{
-                        resultMatrix[row][column] = dotMultiplyVectors(getRow(row), input.getColumn(column));
+                        resultMatrix[row][column] = dotMultiplyVectors(getRow(row), input.getColumn(column), 32).getSumTotal();
                     }
                     catch(IllegalArgumentException e){
                         throw e;
@@ -68,17 +68,22 @@ public class Matrix {
         return null;
     }
 
-    public static BigDecimal dotMultiplyVectors(BigDecimal[] v1, BigDecimal[] v2){
-        //todo finish this and implement it as part of the matrix multiplication.
+    public static Vector dotMultiplyVectors(BigDecimal[] v1, BigDecimal[] v2, int precision){
+        //Unsure if this still needs to be here since we now have dot multiplication as part of Vector
         if(v1.length != v2.length){
             throw new IllegalArgumentException("vectors supplied to dot multiplication are not of compatible length");
         }
-        BigDecimal total = new BigDecimal(0);
-        for(int i=0; i<v1.length; i++){
-            total = total.add(v1[i].multiply(v2[i]));
-        }
-        return total;
+        return new Vector(v1).dotMultiplication(new Vector(v2), precision);
     }
+
+
+    public static Vector addVectors(BigDecimal[] v1, BigDecimal[] v2){
+        if(v1.length != v2.length){
+            throw new IllegalArgumentException("vectors supplied to addition function are not of compatible length");
+        }
+        return new Vector(v1).add(new Vector(v2));
+    }
+
 
     //I may decide to change these so they return a vector instead if I have need of it later
     public BigDecimal[] multiplyRowByValue(int rowNum, BigDecimal factor, int precision){
@@ -145,9 +150,8 @@ public class Matrix {
         System.out.println(alpha.multiply(multiplicand, new MathContext(32))); //this should result in an output of 1. find out why it isn't doing that.
         System.out.println("scale: " + alpha.scale());
 
-        //m[0] = multiplyRowByValue(0,multiplicand, 32);
-        m[0] = new Vector(m[0]).dotMultiplication(multiplicand, 32).getContents(); //creates a new vector object, performs a multiplication on its contents, and stores that in m[0]
-        
+        m[0] = multiplyRowByValue(m[0], multiplicand, 32);
+
         System.out.println(m[0][colA]);
         System.out.println(colA); //TODO Ask others for their opinions on how best to handle determining the rounding. I think I will just default to 32dp
         System.out.println("alpha: " + alpha);
@@ -157,8 +161,23 @@ public class Matrix {
         }*/
 
         //step 4 multiply each row below the first by a multiple of the first such that each value in the same column as a ends as zero.
-        for (int i = 1; i < no_rows; i++){
+        for (int i = 1; i < m.length; i++){
+            //Vector targetRow = new Vector(m[i]);
            // m[i] = dotMultiplyVectors(multiplyRowByValue(m[0], m[0][0], 32), m[i]);
+            //want to multiply m[i] by m[0] after it has been multiplied by the inverse of m[i]? Am I going insane?
+            BigDecimal inverseOfM_i = m[i][colA].negate();
+            System.out.println("m[i][colA].negate =" + m[i][colA].negate() );
+            System.out.println("zero, colA = " + m[0][colA]);       //Identified possible source of the issue: m[0][colA] is changing despite no operations being done on it.
+            BigDecimal[] multipleOfRowAlpha = multiplyRowByValue(m[0], inverseOfM_i, 32);
+            System.out.println("zero colA multiplied by m[i][colA].negate is:" + multipleOfRowAlpha[colA]);
+            BigDecimal temp = m[i][colA];
+           System.out.println(temp);
+           System.out.println("");
+            //System.out.println("Multiple of alpha = "+ multipleOfRowAlpha[colA]);
+            //System.out.println("m[i][colA] = "+ m[i][colA]);
+
+           // m[i] = addVectors(m[i],multipleOfRowAlpha).getContents();
+            //System.out.printf("result of adding %s to %s is %s\n", multipleOfRowAlpha[colA],temp, m[i][colA]);
         }
 
         return null;

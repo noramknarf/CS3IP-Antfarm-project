@@ -43,4 +43,16 @@ public class Vector {
         }
         return new Vector(v2);
     }
+
+    public Vector add(Vector otherVector){
+        BigDecimal[] v2 = otherVector.contents;
+        if(contents.length != v2.length){
+            throw new IllegalArgumentException("vectors supplied to addition function are not of compatible length");
+        }
+        BigDecimal[] v3 = new BigDecimal[v2.length];
+        for(int i=0; i< v2.length; i++){
+            v3[i] = contents[i].add(v2[i]);
+        }
+        return new Vector(v3);
+    }
 }

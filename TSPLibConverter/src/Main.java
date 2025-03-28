@@ -38,9 +38,9 @@ public class Main {
             collatedData.sort(null);
             dataWithDuplicates.sort(null);
             System.out.println("Wario");
-            for(Edge i: dataWithDuplicates){
+           /* for(Edge i: dataWithDuplicates){
                 System.out.println(i);
-            }
+            }*/
             Matrix dstMatrix = formDSTMatrix(dataWithDuplicates, nodes.size());
             methodTest();//comment
             Matrix matrixM = calculateM(dstMatrix.matrixMultiplication(dstMatrix));
