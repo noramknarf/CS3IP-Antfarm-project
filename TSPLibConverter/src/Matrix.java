@@ -104,7 +104,7 @@ public class Matrix {
 
         //int col = 0;
         BigDecimal scanner = BigDecimal.ZERO;
-        Boolean empty = false;
+        boolean empty = true;
         int colA = 0;
         int alpha_row = 0;
         BigDecimal alpha = BigDecimal.ZERO;
@@ -141,9 +141,13 @@ public class Matrix {
         }
         //step 3 - convert value a to 1 by multiplying the topmost row by its inverse
         BigDecimal multiplicand = BigDecimal.ONE.divide(alpha, 400, RoundingMode.HALF_UP);
+
         System.out.println(alpha.multiply(multiplicand, new MathContext(32))); //this should result in an output of 1. find out why it isn't doing that.
         System.out.println("scale: " + alpha.scale());
-        m[0] = multiplyRowByValue(0,multiplicand, 32);
+
+        //m[0] = multiplyRowByValue(0,multiplicand, 32);
+        m[0] = new Vector(m[0]).dotMultiplication(multiplicand, 32).getContents(); //creates a new vector object, performs a multiplication on its contents, and stores that in m[0]
+        
         System.out.println(m[0][colA]);
         System.out.println(colA); //TODO Ask others for their opinions on how best to handle determining the rounding. I think I will just default to 32dp
         System.out.println("alpha: " + alpha);
