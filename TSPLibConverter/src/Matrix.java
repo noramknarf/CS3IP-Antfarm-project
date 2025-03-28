@@ -108,8 +108,19 @@ public class Matrix {
         BigDecimal[][] m = inputMatrix.getContents();
 
 
+        inputMatrix.outputContents();
+        System.out.println("logging contents");
+        System.out.println("length= "+m.length);
+        if(m[1][0] != null){
+            System.out.println(m[1][0]);
+            System.out.println("compared: "+ m[1][0].compareTo(BigDecimal.ZERO));
+
+        }
+        else{
+            System.out.println("m[0][1] is null");
+            System.out.println(m[0]);
+        }
         //int col = 0;
-        BigDecimal scanner = BigDecimal.ZERO;
         boolean empty = true;
         int colA = 0;
         int alpha_row = 0;
@@ -117,7 +128,7 @@ public class Matrix {
         //step 1 find the leftmost column with a non-zero value (column A)
         for (int column = 0; column < inputMatrix.getNo_columns(); column++){
             for(int row = 0; row < inputMatrix.getNo_rows(); row++){
-                if (m[row][column] != BigDecimal.ZERO) {
+                if (m[row][column] != BigDecimal.ZERO && m[row][column] != null) {
                     colA = column;
                     alpha_row = row;
                     empty = false;
@@ -180,7 +191,15 @@ public class Matrix {
         output[0] = m[0];
         if (m.length > 1){
             BigDecimal[][] inputToNextLayer = new BigDecimal[m.length-1][m[0].length];
-            System.arraycopy(m, 1, inputToNextLayer, 1, m.length - 2);
+            System.out.println(m[0][0]);
+            for(int row = 1; row<m.length; row++){
+                inputToNextLayer[row-1] = m[row];
+                for(BigDecimal i : inputToNextLayer[row-1]){
+                    System.out.println(i);
+                }
+
+            }
+            System.out.println("");
             Matrix remainingRows = gaussianElimination(new Matrix(inputToNextLayer));
             int i = 1;
             for(BigDecimal[] row : remainingRows.getContents()){
@@ -197,6 +216,18 @@ public class Matrix {
         matrix[row1] = matrix[row2];
         matrix[row2] = temp;
         return matrix;
+    }
+
+    public void outputContents(){
+        //String output = "";
+        for(int j = 0; j < matrix.length; j++){
+            for(int i = 0; i < matrix.length; i++){
+                System.out.printf("%s, ", matrix[j][i]);
+                if(i == matrix.length-1){
+                    System.out.print("\n");
+                }
+            }
+        }
     }
 }
 /*idea final step is recursive, calling gaussian Elim on a new matrix (or just change param to matrix contents.
