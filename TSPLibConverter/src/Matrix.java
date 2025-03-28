@@ -111,15 +111,6 @@ public class Matrix {
         inputMatrix.outputContents();
         System.out.println("logging contents");
         System.out.println("length= "+m.length);
-        if(m[1][0] != null){
-            System.out.println(m[1][0]);
-            System.out.println("compared: "+ m[1][0].compareTo(BigDecimal.ZERO));
-
-        }
-        else{
-            System.out.println("m[0][1] is null");
-            System.out.println(m[0]);
-        }
         //int col = 0;
         boolean empty = true;
         int colA = 0;
@@ -128,7 +119,7 @@ public class Matrix {
         //step 1 find the leftmost column with a non-zero value (column A)
         for (int column = 0; column < inputMatrix.getNo_columns(); column++){
             for(int row = 0; row < inputMatrix.getNo_rows(); row++){
-                if (m[row][column] != BigDecimal.ZERO && m[row][column] != null) {
+                if ( m[row][column] != null && (m[row][column].compareTo(BigDecimal.ZERO) != 0)) {
                     colA = column;
                     alpha_row = row;
                     empty = false;
@@ -156,6 +147,7 @@ public class Matrix {
             m = inputMatrix.swapRow(0, alpha_row);
             System.out.printf("Swapped %d with 0\n", alpha_row);
         }
+        System.out.println(alpha);
         //step 3 - convert value a to 1 by multiplying the topmost row by its inverse
         BigDecimal multiplicand = BigDecimal.ONE.divide(alpha, 400, RoundingMode.HALF_UP);
 
