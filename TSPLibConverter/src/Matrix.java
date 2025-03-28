@@ -157,20 +157,14 @@ public class Matrix {
         System.out.println(colA); //TODO Ask others for their opinions on how best to handle determining the rounding. I think I will just default to 32dp
         System.out.println("alpha: " + alpha);
         System.out.println("result of multiplication:" + m[0][colA]);
-       /* for(BigDecimal x:m[0]){
-            System.out.println(x);
-        }*/
-
         //step 4 multiply each row below the first by a multiple of the first such that each value in the same column as a ends as zero.
         for (int i = 1; i < m.length; i++){
             //Vector targetRow = new Vector(m[i]);
-           // m[i] = dotMultiplyVectors(multiplyRowByValue(m[0], m[0][0], 32), m[i]);
-            //want to multiply m[i] by m[0] after it has been multiplied by the inverse of m[i]? Am I going insane?
             BigDecimal inverseOfM_i = m[i][colA].negate();
-            System.out.println("m[i][colA].negate =" + m[i][colA].negate() );
-            System.out.println("zero, colA = " + m[0][colA]);       //Identified possible source of the issue: m[0][colA] is changing despite no operations being done on it.
+            //System.out.println("m[i][colA].negate =" + m[i][colA].negate() );
+            //System.out.println("zero, colA = " + m[0][colA]);       //Identified possible source of the issue: m[0][colA] is changing despite no operations being done on it.
             BigDecimal[] multipleOfRowAlpha = multiplyRowByValue(m[0], inverseOfM_i, 50);
-            System.out.println("zero colA multiplied by m[i][colA].negate is:" + multipleOfRowAlpha[colA]);
+            //System.out.println("zero colA multiplied by m[i][colA].negate is:" + multipleOfRowAlpha[colA]);
             BigDecimal temp = m[i][colA];
            System.out.println(temp);
 
@@ -178,12 +172,23 @@ public class Matrix {
 
 
             m[i] = addVectors(m[i],multipleOfRowAlpha).getContents();
-            System.out.println("m[i][colA] = "+ m[i][colA]);
-            System.out.println("");
+          //  System.out.println("m[i][colA] = "+ m[i][colA]);
+           // System.out.println("");
             //System.out.printf("result of adding %s to %s is %s\n", multipleOfRowAlpha[colA],temp, m[i][colA]);
         }
-
-        return null;
+        BigDecimal[][] output = new BigDecimal[m.length][m[0].length];
+        output[0] = m[0];
+        if (m.length > 1){
+            BigDecimal[][] inputToNextLayer = new BigDecimal[m.length-1][m[0].length];
+            System.arraycopy(m, 1, inputToNextLayer, 1, m.length - 2);
+            Matrix remainingRows = gaussianElimination(new Matrix(inputToNextLayer));
+            int i = 1;
+            for(BigDecimal[] row : remainingRows.getContents()){
+                output[i] = row;
+                i++;
+            }
+        }
+        return new Matrix(output);
     }
 
     //used to swap the positions of two rows in the matrix
