@@ -136,7 +136,7 @@ public class Matrix {
             return null;
         }
         //step 1.5 - find the row of the greatest value in the column (value a, in row alpha)
-        for(int row = 0; row < inputMatrix.getNo_rows(); row++) {
+        for(int row = 0; row < inputMatrix.getNo_rows(); row++) { //todo - change this to use getcolumn()
             if (m[row][colA].compareTo(alpha) > 0) {
                 alpha_row = row;
                 alpha = m[row][colA];
@@ -157,7 +157,7 @@ public class Matrix {
         m[0] = multiplyRowByValue(m[0], multiplicand, 32);
 
         System.out.println(m[0][colA]);
-        System.out.println(colA); //TODO Ask others for their opinions on how best to handle determining the rounding. I think I will just default to 32dp
+        System.out.println("colA = " + colA); //TODO Ask others for their opinions on how best to handle determining the rounding. I think I will just default to 32dp
         System.out.println("alpha: " + alpha);
         System.out.println("result of multiplication:" + m[0][colA]);
         //step 4 multiply each row below the first by a multiple of the first such that each value in the same column as a ends as zero.
@@ -179,6 +179,22 @@ public class Matrix {
            // System.out.println("");
             //System.out.printf("result of adding %s to %s is %s\n", multipleOfRowAlpha[colA],temp, m[i][colA]);
         }
+        Matrix mAsMatrix = new Matrix(m);
+        System.out.println("Slice from rows 0-4");
+        if (m.length >= 5){
+
+            mAsMatrix.outputRow(0);
+            mAsMatrix.outputRow(1);
+            mAsMatrix.outputRow(2);
+            mAsMatrix.outputRow(3);
+            mAsMatrix.outputRow(4);
+            System.out.printf("\n.......\n");
+        }
+        System.out.println("rowA.len = "+ m[alpha_row].length);
+        System.out.println("Outputting the entirety of colA:");
+        mAsMatrix.outputColumn(colA);
+        System.out.printf("\n.......\n");
+
         BigDecimal[][] output = new BigDecimal[m.length][m[0].length];
         output[0] = m[0];
         if (m.length > 1){
@@ -214,11 +230,37 @@ public class Matrix {
         //String output = "";
         for(int j = 0; j < matrix.length; j++){
             for(int i = 0; i < matrix.length; i++){
+                if(i == 0){
+                    System.out.printf("./.");
+                }
                 System.out.printf("%s, ", matrix[j][i]);
                 if(i == matrix.length-1){
                     System.out.print("\n");
                 }
             }
+        }
+    }
+
+    public void outputRow(int rowNum){
+        if(rowNum < matrix.length){
+            for (BigDecimal i : matrix[rowNum]){
+                System.out.printf("%s, ", i);
+            }
+            System.out.printf("\n");
+        }
+        else{
+            System.err.println("Error: Row number supplied to outputRow exceeds matrix size");
+        }
+    }
+    public void outputColumn(int colNum){
+        if(colNum < matrix[0].length){
+            for (BigDecimal i : getColumn(colNum)){
+                System.out.printf("%s, ", i);
+            }
+            System.out.printf("\n");
+        }
+        else{
+            System.err.println("Error: col number supplied to outputRow exceeds matrix size");
         }
     }
 }
