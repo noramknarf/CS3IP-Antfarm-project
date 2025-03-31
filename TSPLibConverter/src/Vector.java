@@ -1,5 +1,6 @@
 import java.math.BigDecimal;
 import java.math.MathContext;
+import java.math.RoundingMode;
 
 public class Vector {
     private BigDecimal[] contents;
@@ -51,7 +52,7 @@ public class Vector {
         }
         BigDecimal[] v3 = new BigDecimal[v2.length];
         for(int i=0; i< v2.length; i++){
-            v3[i] = contents[i].add(v2[i]);
+            v3[i] = contents[i].add(v2[i], new MathContext(32, RoundingMode.HALF_DOWN));
         }
         return new Vector(v3);
     }

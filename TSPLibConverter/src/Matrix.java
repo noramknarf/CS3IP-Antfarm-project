@@ -126,7 +126,6 @@ public class Matrix {
                     alpha = m[row][column];
                     break;
                 }
-
             }
             if(!empty){
                 break;
@@ -137,12 +136,12 @@ public class Matrix {
         }
         //step 1.5 - find the row of the greatest value in the column (value a, in row alpha)
         for(int row = 0; row < inputMatrix.getNo_rows(); row++) { //todo - change this to use getcolumn()
-            if (m[row][colA].compareTo(alpha) > 0) {
+            if (m[row][colA].compareTo(alpha) > 0 && m[row][colA].compareTo(BigDecimal.ZERO) != 0) {
                 alpha_row = row;
                 alpha = m[row][colA];
             }
-        }
-        //step 2 - if it is not already, swap the top row with row alpha to make value a the topmost value in its column
+        } //the ones are not coming from here
+        //step 2 - if it is not already, swap the top row with row alpha to make value alpha the topmost value in its column
         if(alpha_row != 0){
             m = inputMatrix.swapRow(0, alpha_row);
             System.out.printf("Swapped %d with 0\n", alpha_row);
@@ -151,7 +150,7 @@ public class Matrix {
         //step 3 - convert value a to 1 by multiplying the topmost row by its inverse
         BigDecimal multiplicand = BigDecimal.ONE.divide(alpha, 400, RoundingMode.HALF_UP);
 
-        System.out.println(alpha.multiply(multiplicand, new MathContext(32))); //this should result in an output of 1. find out why it isn't doing that.
+        System.out.println(alpha.multiply(multiplicand, new MathContext(32))); //
         System.out.println("scale: " + alpha.scale());
 
         m[0] = multiplyRowByValue(m[0], multiplicand, 32);
@@ -168,13 +167,16 @@ public class Matrix {
             //System.out.println("zero, colA = " + m[0][colA]);       //Identified possible source of the issue: m[0][colA] is changing despite no operations being done on it.
             BigDecimal[] multipleOfRowAlpha = multiplyRowByValue(m[0], inverseOfM_i, 50);
             //System.out.println("zero colA multiplied by m[i][colA].negate is:" + multipleOfRowAlpha[colA]);
-            BigDecimal temp = m[i][colA];
-           System.out.println(temp);
+            //BigDecimal temp = m[i][colA];
+           //System.out.println(temp);
 
             //System.out.println("Multiple of alpha = "+ multipleOfRowAlpha[colA]);
-
+            BigDecimal[] temp = m[i];
 
             m[i] = addVectors(m[i],multipleOfRowAlpha).getContents();
+            if(i >= 145){
+                System.out.printf("row %d: %s + %s = %s. resulted in: %s\n", i, temp[4], multipleOfRowAlpha[4],temp[4].add(multipleOfRowAlpha[4]), m[i][4]);
+            }
           //  System.out.println("m[i][colA] = "+ m[i][colA]);
            // System.out.println("");
             //System.out.printf("result of adding %s to %s is %s\n", multipleOfRowAlpha[colA],temp, m[i][colA]);
@@ -192,7 +194,7 @@ public class Matrix {
         }
         System.out.println("rowA.len = "+ m[alpha_row].length);
         System.out.println("Outputting the entirety of colA:");
-        mAsMatrix.outputColumn(colA);
+        mAsMatrix.outputColumn(colA); //todo: try outputting the details of the multiplication operations being performed on the weird rows
         System.out.printf("\n.......\n");
 
         BigDecimal[][] output = new BigDecimal[m.length][m[0].length];
