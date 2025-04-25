@@ -144,7 +144,7 @@ public class Matrix {
         Matrix mAsMatrix = new Matrix(m);
         BigDecimal[][] output = new BigDecimal[m.length][m[0].length];
         output[0] = m[0];
-
+        //repeats the process with a matrix consisting of all rows below the first until we end up with a fully RREF matrix
         if (m.length > 1){
             BigDecimal[][] inputToNextLayer = new BigDecimal[m.length-1][m[0].length];
             for(int row = 1; row<m.length; row++){

@@ -8,7 +8,6 @@ import java.util.regex.Pattern;
 public class Main {
 
     public static void main(String[] args)  {
-        //arraylist in which to store the parsed data as individual node objects
 
         System.out.println("Attempting to translate XML file into a usable format");
         System.out.println("");
@@ -61,14 +60,16 @@ public class Main {
         matrixM.gaussianElimination().outputContents();
     }
 
-
+    //used to manually check the formatting of certain data when put together.
+    //Yes I know how to use debug mode but this comes more naturally to me
     static void printDebuginfo(ArrayList<Edge> collatedData, ArrayList<Edge> dataWithDuplicates, ArrayList<Node> nodes){
         System.out.println("total datapoints = " + collatedData.size()); // Just to verify there are exactly the right number of edges, meaning no duplicates.
         System.out.println("total including duplicates = " + dataWithDuplicates.size());
         System.out.println("CollatedData[0] = " + collatedData.getFirst());
         System.out.println("CollatedData[-1] = " + collatedData.getLast());
 
-        //Checking whether Edges now can be successfully compared (should automatically compare based on the id of the origin node)
+        //Checking whether Edges now can be successfully compared
+        //(should automatically compare based on the id of the origin node)
         if (collatedData.getLast().compareTo(collatedData.getFirst()) > 0){
             System.out.println("[-1] is greater than [0]");
         }
@@ -84,6 +85,9 @@ public class Main {
 
 
     static Matrix formDSTMatrix(ArrayList<Edge> edgeDataset, int numberOfNodes){
+        //I chose to use BigDecimal to represent the distances because it allows a /very/ fine degree of precision
+        //and lets you specify how numbers are rounded,
+        //which is useful for maintaining accuracy when performing a vast number of operations like I am here
         BigDecimal[][] dstMatrix = new BigDecimal[numberOfNodes][numberOfNodes];
         System.out.println("dstMatrix row length = " + dstMatrix.length);
         System.out.println("dstMatrix length = " + dstMatrix.length * dstMatrix.length);
@@ -91,21 +95,11 @@ public class Main {
         int h = 0;
         for(int j = 0; j < dstMatrix.length; j++){
             for(int i = 0; i < dstMatrix.length; i++){
-               // System.out.printf("i = %d, j = %d, h = %d\n", i, j, h);
                 Edge tempEdgeHolder = edgeDataset.get(h);
-               // System.out.println(tempEdgeHolder);
                 dstMatrix[j][i] = tempEdgeHolder.getDistance();
 
                 h++;
 
-            }
-        }
-        for(int j = 0; j < dstMatrix.length; j++){
-            for(int i = 0; i < dstMatrix.length; i++){
-                System.out.printf("%s, ", dstMatrix[j][i]);
-                if(i == dstMatrix.length-1){
-                    System.out.print("\n");
-                }
             }
         }
         return new Matrix(dstMatrix);
@@ -126,8 +120,9 @@ public class Main {
         Pattern edgeCost = Pattern.compile("cost=\"(.*?)\""); //Should (in theory) match for the shortest uninterrupted string between 'cost="', and '"'
         Pattern destinationPattern = Pattern.compile(">(.*?)<"); //Likewise, should theoretically match for the destination node
 
-        //This is just a mechanism for more cleanly displaying only one node in the terminal output.
-        boolean firstnode = true;
+
+        boolean firstnode = true; //This is just a mechanism for more cleanly displaying only one node in the terminal output.
+                                    //The code relating to it has largely been removed as it was unnecessary, but I kept this part in case I ever need it again.
         boolean isnode = false;
 
         Node currentNode = null;
@@ -158,16 +153,11 @@ public class Main {
 
                 if (costMatcher != null && destinationMatcher != null) {
                     if (costMatcher.find() && destinationMatcher.find()) {
-                        //System.out.println("costMatcher's group = " + costMatcher.group(1)); //testing to see if we can output only the matched string - we can, but it only remembers the most recent. Will need to add to a data structure.
-                        //System.out.println("Destination of that node = " + destinationMatcher.group(1));
                         BigDecimal formattedCost = new BigDecimal(costMatcher.group(1));
-                        //System.out.println(formattedCost);
-
                         currentNode.AddEdge(new Edge(numberOfNodes-1, Integer.parseInt(destinationMatcher.group(1)), formattedCost)); //figured out the number of nodes was causing this to
                     }
                     //Safety to make sure no formatting errors result in one edge's values being mixed with another
                     costMatcher = destinationMatcher = null;
-
                 }
             }
         }
@@ -176,12 +166,12 @@ public class Main {
     }
 
     static Matrix calculateM(Matrix inputMatrix){
-        BigDecimal[][] mData = new BigDecimal[inputMatrix.getNo_rows()][inputMatrix.getNo_columns()]; //doesn't actually matter whether you use rows or columns as inputmatrix will always be a perfect
+        BigDecimal[][] mData = new BigDecimal[inputMatrix.getNo_rows()][inputMatrix.getNo_columns()]; //doesn't actually matter whether you use rows or columns as inputmatrix will always be a perfect square
         BigDecimal[][] dContents = inputMatrix.getContents();
 
         for (int i = 0; i<inputMatrix.getNo_rows(); i++){
             for(int j = 0; j<inputMatrix.getNo_columns(); j++){
-                mData[i][j] = (dContents[1][j].add(dContents[i][1]).subtract(dContents[i][j])).divide(BigDecimal.valueOf(2.0));
+                mData[i][j] = ((dContents[1][j].add(dContents[i][1])).subtract(dContents[i][j])).divide(BigDecimal.valueOf(2.0));
             }
 
         }

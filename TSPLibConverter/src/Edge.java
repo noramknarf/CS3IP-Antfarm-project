@@ -25,6 +25,8 @@ public BigDecimal getDistance(){
     return this.distance;
 }
 
+    //Allows edges to easily be sorted using java's inbuilt sort() method,
+    //with the edges being arranged by their origin node or by their endpoint if they share the same origin
     @Override
     public int compareTo(Edge o) {
     int surfaceLevelCompare = Integer.compare(this.origin, o.getOrigin());
