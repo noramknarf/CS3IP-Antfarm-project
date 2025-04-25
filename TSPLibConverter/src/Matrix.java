@@ -38,9 +38,6 @@ public class Matrix {
     }
 
     public Matrix matrixMultiplication(Matrix input){
-        BigDecimal[][] otherMatrix = input.getContents();
-
-
         if (this.no_columns == input.getNo_rows()){
             BigDecimal[][] resultMatrix = new BigDecimal[this.no_columns][input.getNo_rows()];
             for(int row=0; row < this.getNo_rows(); row++){
@@ -52,8 +49,6 @@ public class Matrix {
                         throw e;
                     }
                 }
-
-                //vectorMultiply(getColumn(i), )
             }
             return new Matrix(resultMatrix);
         }
@@ -104,10 +99,9 @@ public class Matrix {
         BigDecimal[][] m = this.matrix;
 
 
-        outputContents();
+       /* outputContents();
         System.out.println("logging contents");
-        System.out.println("length= "+m.length);
-        //int col = 0;
+        System.out.println("length= "+m.length);*/
         boolean empty = true;
         int colA = 0;
         int alpha_row = 0;
@@ -131,54 +125,43 @@ public class Matrix {
             return null;
         }
         //step 1.5 - find the row of the greatest value in the column (value a, in row alpha)
-        for(int row = 0; row < getNo_rows(); row++) { //todo - change this to use getcolumn()
+        for(int row = 0; row < getNo_rows(); row++) {
             if (m[row][colA].compareTo(alpha) > 0 && m[row][colA].compareTo(BigDecimal.ZERO) != 0) {
                 alpha_row = row;
                 alpha = m[row][colA];
             }
-        } //the ones are not coming from here
+        }
         //step 2 - if it is not already, swap the top row with row alpha to make value alpha the topmost value in its column
         if(alpha_row != 0){
             m = swapRow(0, alpha_row);
-            System.out.printf("Swapped %d with 0\n", alpha_row);
+            //System.out.printf("Swapped %d with 0\n", alpha_row);
         }
-        System.out.println(alpha);
+        //System.out.println(alpha);
         //step 3 - convert value a to 1 by multiplying the topmost row by its inverse
         BigDecimal multiplicand = BigDecimal.ONE.divide(alpha, 400, RoundingMode.HALF_UP);
 
-        System.out.println(alpha.multiply(multiplicand, new MathContext(32))); //
-        System.out.println("scale: " + alpha.scale());
+        //System.out.println(alpha.multiply(multiplicand, new MathContext(32))); //
+        //System.out.println("scale: " + alpha.scale());
 
         m[0] = multiplyRowByValue(m[0], multiplicand, 32);
 
-        System.out.println(m[0][colA]);
-        System.out.println("colA = " + colA); //TODO Ask others for their opinions on how best to handle determining the rounding. I think I will just default to 32dp
+       /* System.out.println(m[0][colA]);
+        System.out.println("colA = " + colA);
         System.out.println("alpha: " + alpha);
-        System.out.println("result of multiplication:" + m[0][colA]);
+        System.out.println("result of multiplication:" + m[0][colA]); */
         //step 4 multiply each row below the first by a multiple of the first such that each value in the same column as a ends as zero.
         for (int i = 1; i < m.length; i++){
-            //Vector targetRow = new Vector(m[i]);
             BigDecimal inverseOfM_i = m[i][colA].negate();
-            //System.out.println("m[i][colA].negate =" + m[i][colA].negate() );
-            //System.out.println("zero, colA = " + m[0][colA]);       //Identified possible source of the issue: m[0][colA] is changing despite no operations being done on it.
             BigDecimal[] multipleOfRowAlpha = multiplyRowByValue(m[0], inverseOfM_i, 50);
-            //System.out.println("zero colA multiplied by m[i][colA].negate is:" + multipleOfRowAlpha[colA]);
-            //BigDecimal temp = m[i][colA];
-           //System.out.println(temp);
-
-            //System.out.println("Multiple of alpha = "+ multipleOfRowAlpha[colA]);
             BigDecimal[] temp = m[i];
 
             m[i] = addVectors(m[i],multipleOfRowAlpha).getContents();
-            if(i >= 145){
+          /*  if(i >= 145){
                 System.out.printf("row %d: %s + %s = %s. resulted in: %s\n", i, temp[4], multipleOfRowAlpha[4],temp[4].add(multipleOfRowAlpha[4]), m[i][4]);
-            }
-          //  System.out.println("m[i][colA] = "+ m[i][colA]);
-           // System.out.println("");
-            //System.out.printf("result of adding %s to %s is %s\n", multipleOfRowAlpha[colA],temp, m[i][colA]);
+            } */
         }
         Matrix mAsMatrix = new Matrix(m);
-        System.out.println("Slice from rows 0-4");
+        /*System.out.println("Slice from rows 0-4"); debugging statements
         if (m.length >= 5){
 
             mAsMatrix.outputRow(0);
@@ -190,19 +173,20 @@ public class Matrix {
         }
         System.out.println("rowA.len = "+ m[alpha_row].length);
         System.out.println("Outputting the entirety of colA:");
-        mAsMatrix.outputColumn(colA); //todo: try outputting the details of the multiplication operations being performed on the weird rows
+        mAsMatrix.outputColumn(colA);
         System.out.printf("\n.......\n");
+        */
 
         BigDecimal[][] output = new BigDecimal[m.length][m[0].length];
         output[0] = m[0];
         if (m.length > 1){
             BigDecimal[][] inputToNextLayer = new BigDecimal[m.length-1][m[0].length];
-            System.out.println(m[0][0]);
+            //System.out.println(m[0][0]);
             for(int row = 1; row<m.length; row++){
                 inputToNextLayer[row-1] = m[row];
-                for(BigDecimal i : inputToNextLayer[row-1]){
+               /* for(BigDecimal i : inputToNextLayer[row-1]){
                     System.out.println(i);
-                }
+                }*/
 
             }
             System.out.println("");
