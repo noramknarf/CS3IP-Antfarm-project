@@ -12,6 +12,7 @@ public class Vector {
     public BigDecimal[] getContents(){
         return this.contents;
     }
+
     public BigDecimal getSumTotal(){
         BigDecimal total = BigDecimal.ZERO;
         for(BigDecimal item: this.contents){
@@ -34,6 +35,7 @@ public class Vector {
         }
         return new Vector(v3);
     }
+    //was not utilised in the end but has been kept in in case it proves useful at some later point
     public Vector dotMultiplication(BigDecimal multiplicand, int precision){
         BigDecimal[] v1 = this.contents;
         BigDecimal[] v2 = new BigDecimal[v1.length];
