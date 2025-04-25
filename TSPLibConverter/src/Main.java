@@ -25,23 +25,24 @@ public class Main {
         System.out.println("Formatting dataset for composition into DST matrix");
         System.out.println("");
         EdgeDataObject edgeData = new EdgeDataObject(nodes);
-        ArrayList<Edge> collatedData = edgeData.getNoDuplicates();
+        //ArrayList<Edge> collatedData = edgeData.getNoDuplicates();
         ArrayList<Edge> dataWithDuplicates = edgeData.getWithDuplicates();
 
             /*
             seeding collatedData with nodes to hold the 0 distance edges (solely for the purposes of the distance matrix.
             If having 0 distance edges causes problems once in MC, it could be solved by adding them to a duplicate of the collatedData instead and using that for the dst matrix
             */
+        System.out.println("Seeding dataset with dummy nodes");
         for (int i = 0; i < nodes.size(); i++){
             Edge dummyEdge = new Edge(i, i, BigDecimal.ZERO);
-            collatedData.add(dummyEdge);
+            //collatedData.add(dummyEdge);
             dataWithDuplicates.add(dummyEdge);
         }
             //The following handles debugging print statements and should be cleaned up before any proper submission
         // ------------------------------------------------------------------------------------------------------
             //printDebuginfo(collatedData, dataWithDuplicates, nodes);
         //-------------------------------------------------------------------------------------------------------
-        collatedData.sort(null);
+        //collatedData.sort(null);
         dataWithDuplicates.sort(null);
         System.out.println("");
         System.out.println("Composing dataset into DST matrix");
@@ -58,6 +59,9 @@ public class Main {
         System.out.println("Calculating RREF of M to obtain k");
         System.out.println("");
         matrixM.gaussianElimination().outputContents();
+        // please note that this code is incomplete.
+        // The intention is eventually to output the finished coordinate set to a file, however for now I am simply outputting each stage of the process to the terminal,
+        // which is not able to display the full output resulting from the larger TSPLIB files.
     }
 
     //used to manually check the formatting of certain data when put together.
@@ -107,7 +111,9 @@ public class Main {
 
 
     static ArrayList<Node> translate_XML() throws IOException{
-        Scanner fileReader = new Scanner(new File("Resources/InputFiles/pr152.xml"));
+        //for now, this is the only way to select a file to translate.
+        //Please note that due to the exponentially larger numbers of nodes, the larger numbered files will take a LONG time to format
+        Scanner fileReader = new Scanner(new File("Resources/InputFiles/pr76.xml"));
         String dataToRead;
         Matcher patternMatcher;
         Matcher costMatcher = null;
