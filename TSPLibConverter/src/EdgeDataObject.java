@@ -9,8 +9,6 @@ public class EdgeDataObject {
         this.dataWithoutDuplicates = new ArrayList<Edge>();
         this.dataWithDuplicates = new ArrayList<Edge>(); // for use in the dstMatrix
 
-        String concatKey;
-        String reverseConcat;
         for (int i = 0; i < nodes.size(); i++) {
             for (Edge entry : nodes.get(i).getEdges()) {
                 boolean logicalDuplicate = false;
@@ -22,7 +20,6 @@ public class EdgeDataObject {
                     } else if ((entry.getDestination() == j.getOrigin() && entry.getOrigin() == j.getDestination())) {
                         logicalDuplicate = true;
                         break;
-                        // System.out.println("Duplicate detected");
                     }
                 }
                 if (!exactDuplicate) {

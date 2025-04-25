@@ -14,9 +14,6 @@ public class Matrix {
         no_columns = matrix[0].length;
     }
 
-    public void multiply(){
-
-    }
     public BigDecimal[] getRow(int i){
         return matrix[i];
     }
@@ -39,7 +36,6 @@ public class Matrix {
     public BigDecimal[][] getContents(){
         return this.matrix;
     }
-//words
 
     public Matrix matrixMultiplication(Matrix input){
         BigDecimal[][] otherMatrix = input.getContents();
@@ -104,11 +100,11 @@ public class Matrix {
         return row;
     }
 
-    public Matrix gaussianElimination(Matrix inputMatrix){
-        BigDecimal[][] m = inputMatrix.getContents();
+    public Matrix gaussianElimination(){
+        BigDecimal[][] m = this.matrix;
 
 
-        inputMatrix.outputContents();
+        outputContents();
         System.out.println("logging contents");
         System.out.println("length= "+m.length);
         //int col = 0;
@@ -117,8 +113,8 @@ public class Matrix {
         int alpha_row = 0;
         BigDecimal alpha = BigDecimal.ZERO;
         //step 1 find the leftmost column with a non-zero value (column A)
-        for (int column = 0; column < inputMatrix.getNo_columns(); column++){
-            for(int row = 0; row < inputMatrix.getNo_rows(); row++){
+        for (int column = 0; column < getNo_columns(); column++){
+            for(int row = 0; row < getNo_rows(); row++){
                 if ( m[row][column] != null && (m[row][column].compareTo(BigDecimal.ZERO) != 0)) {
                     colA = column;
                     alpha_row = row;
@@ -135,7 +131,7 @@ public class Matrix {
             return null;
         }
         //step 1.5 - find the row of the greatest value in the column (value a, in row alpha)
-        for(int row = 0; row < inputMatrix.getNo_rows(); row++) { //todo - change this to use getcolumn()
+        for(int row = 0; row < getNo_rows(); row++) { //todo - change this to use getcolumn()
             if (m[row][colA].compareTo(alpha) > 0 && m[row][colA].compareTo(BigDecimal.ZERO) != 0) {
                 alpha_row = row;
                 alpha = m[row][colA];
@@ -143,7 +139,7 @@ public class Matrix {
         } //the ones are not coming from here
         //step 2 - if it is not already, swap the top row with row alpha to make value alpha the topmost value in its column
         if(alpha_row != 0){
-            m = inputMatrix.swapRow(0, alpha_row);
+            m = swapRow(0, alpha_row);
             System.out.printf("Swapped %d with 0\n", alpha_row);
         }
         System.out.println(alpha);
@@ -210,7 +206,7 @@ public class Matrix {
 
             }
             System.out.println("");
-            Matrix remainingRows = gaussianElimination(new Matrix(inputToNextLayer));
+            Matrix remainingRows = new Matrix(inputToNextLayer).gaussianElimination();
             int i = 1;
             for(BigDecimal[] row : remainingRows.getContents()){
                 output[i] = row;

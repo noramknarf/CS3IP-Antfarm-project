@@ -33,25 +33,13 @@ public class Main {
             }
             //The following is all debugging print statements and should be cleaned up before any proper submission
         // ------------------------------------------------------------------------------------------------------
-            printDebuginfo(collatedData, dataWithDuplicates, nodes);
+            //printDebuginfo(collatedData, dataWithDuplicates, nodes);
         //-------------------------------------------------------------------------------------------------------
             collatedData.sort(null);
             dataWithDuplicates.sort(null);
-            System.out.println("Wario");
-           /* for(Edge i: dataWithDuplicates){
-                System.out.println(i);
-            }*/
             Matrix dstMatrix = formDSTMatrix(dataWithDuplicates, nodes.size());
-            methodTest();//comment
             Matrix matrixM = calculateM(dstMatrix.matrixMultiplication(dstMatrix));
-            //System.out.println("Matrix M element 2:" + matrixM.getContents()[0][1]);
-            matrixM.gaussianElimination(matrixM).outputContents();
-    }
-
-
-
-    static void methodTest(){
-        System.out.println("HELLO WORLD");
+            matrixM.gaussianElimination().outputContents();
     }
 
 
@@ -131,7 +119,7 @@ public class Main {
             patternMatcher = vertexStart.matcher(dataToRead);
 
             //identifies the start of a node and sets the boolean to start 'listening' so to speak
-            if(patternMatcher.find()){//if (firstnode && patternMatcher.find()){
+            if(patternMatcher.find()){
                 isnode = true;
                 currentNode = new Node(numberOfNodes);
                 nodes.add(currentNode);
@@ -141,22 +129,22 @@ public class Main {
 
             //identifies the end of the node and sets the boolean to stop listening.
             patternMatcher = vertexEnd.matcher(dataToRead);
-            if (patternMatcher.find()){//(firstnode && patternMatcher.find()) {
+            if (patternMatcher.find()){
                 isnode = firstnode = false;
                 System.out.println("node ends");
             }
 
-            if (isnode ){//& firstnode) {
-                System.out.println(dataToRead);
+            if (isnode){
+                //System.out.println(dataToRead);
                 costMatcher = edgeCost.matcher(dataToRead);
                 destinationMatcher = destinationPattern.matcher(dataToRead);
 
                 if (costMatcher != null && destinationMatcher != null) {
                     if (costMatcher.find() && destinationMatcher.find()) {
-                        System.out.println("costMatcher's group = " + costMatcher.group(1)); //testing to see if we can output only the matched string - we can, but it only remembers the most recent. Will need to add to a data structure.
-                        System.out.println("Destination of that node = " + destinationMatcher.group(1));
+                        //System.out.println("costMatcher's group = " + costMatcher.group(1)); //testing to see if we can output only the matched string - we can, but it only remembers the most recent. Will need to add to a data structure.
+                        //System.out.println("Destination of that node = " + destinationMatcher.group(1));
                         BigDecimal formattedCost = new BigDecimal(costMatcher.group(1));
-                        System.out.println(formattedCost);
+                        //System.out.println(formattedCost);
 
                         currentNode.AddEdge(new Edge(numberOfNodes-1, Integer.parseInt(destinationMatcher.group(1)), formattedCost)); //figured out the number of nodes was causing this to
                     }
