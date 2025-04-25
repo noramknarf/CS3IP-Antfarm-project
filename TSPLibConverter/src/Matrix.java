@@ -54,7 +54,6 @@ public class Matrix {
         }
         else{
             System.out.println("Matrices do not have the correct dimensionality for multiplication");
-
         }
         return null;
     }
@@ -189,7 +188,7 @@ public class Matrix {
                 }*/
 
             }
-            System.out.println("");
+            //System.out.println("");
             Matrix remainingRows = new Matrix(inputToNextLayer).gaussianElimination();
             int i = 1;
             for(BigDecimal[] row : remainingRows.getContents()){

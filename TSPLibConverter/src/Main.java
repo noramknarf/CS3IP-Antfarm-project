@@ -9,15 +9,22 @@ public class Main {
 
     public static void main(String[] args)  {
         //arraylist in which to store the parsed data as individual node objects
+
+        System.out.println("Attempting to translate XML file into a usable format");
+        System.out.println("");
         ArrayList<Node> nodes = new ArrayList<Node>();
         try{
             nodes = translate_XML();
         }
         catch(IOException e) {
-            System.out.println("Error");
+            System.out.println("Error: an I/O exception occurred during the translation process");
             e.printStackTrace();
         }
         //Collating the data in all the nodes into two arrayLists of Edges: one with (logical) duplicates (for use in the dstmatrix), one without them.
+        System.out.println("completed");
+        System.out.println("");
+        System.out.println("Formatting dataset for composition into DST matrix");
+        System.out.println("");
         EdgeDataObject edgeData = new EdgeDataObject(nodes);
         ArrayList<Edge> collatedData = edgeData.getNoDuplicates();
         ArrayList<Edge> dataWithDuplicates = edgeData.getWithDuplicates();
@@ -26,20 +33,32 @@ public class Main {
             seeding collatedData with nodes to hold the 0 distance edges (solely for the purposes of the distance matrix.
             If having 0 distance edges causes problems once in MC, it could be solved by adding them to a duplicate of the collatedData instead and using that for the dst matrix
             */
-            for (int i = 0; i < nodes.size(); i++){
-                Edge dummyEdge = new Edge(i, i, BigDecimal.ZERO);
-                collatedData.add(dummyEdge);
-                dataWithDuplicates.add(dummyEdge);
-            }
-            //The following is all debugging print statements and should be cleaned up before any proper submission
+        for (int i = 0; i < nodes.size(); i++){
+            Edge dummyEdge = new Edge(i, i, BigDecimal.ZERO);
+            collatedData.add(dummyEdge);
+            dataWithDuplicates.add(dummyEdge);
+        }
+            //The following handles debugging print statements and should be cleaned up before any proper submission
         // ------------------------------------------------------------------------------------------------------
             //printDebuginfo(collatedData, dataWithDuplicates, nodes);
         //-------------------------------------------------------------------------------------------------------
-            collatedData.sort(null);
-            dataWithDuplicates.sort(null);
-            Matrix dstMatrix = formDSTMatrix(dataWithDuplicates, nodes.size());
-            Matrix matrixM = calculateM(dstMatrix.matrixMultiplication(dstMatrix));
-            matrixM.gaussianElimination().outputContents();
+        collatedData.sort(null);
+        dataWithDuplicates.sort(null);
+        System.out.println("");
+        System.out.println("Composing dataset into DST matrix");
+        System.out.println("");
+        Matrix dstMatrix = formDSTMatrix(dataWithDuplicates, nodes.size());
+        dstMatrix.outputContents();
+        System.out.println("");
+        System.out.println("Calculating matrix M from DST matrix");
+        System.out.println("");
+        Matrix matrixM = calculateM(dstMatrix.matrixMultiplication(dstMatrix));
+        matrixM.outputContents();
+
+        System.out.println("");
+        System.out.println("Calculating RREF of M to obtain k");
+        System.out.println("");
+        matrixM.gaussianElimination().outputContents();
     }
 
 
@@ -123,7 +142,6 @@ public class Main {
                 isnode = true;
                 currentNode = new Node(numberOfNodes);
                 nodes.add(currentNode);
-                System.out.println("node begins");
                 numberOfNodes ++;
             }
 
@@ -131,7 +149,6 @@ public class Main {
             patternMatcher = vertexEnd.matcher(dataToRead);
             if (patternMatcher.find()){
                 isnode = firstnode = false;
-                System.out.println("node ends");
             }
 
             if (isnode){
